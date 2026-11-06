@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<!-- Bahasa halaman adalah Indonesia. -->
+<html lang="id">
+<head>
+  <!-- Pengkodean huruf agar nama dan ringkasan tampil utuh. -->
+  <meta charset="utf-8">
+  <!-- Lebar mengikuti layar ponsel, skala awal 1. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Judul tab memuat objek, nama, dan NIM. -->
+  <title>Pengumuman Kampus · Dewi Purbarini · 23676003</title>
+  <!-- Font judul bergaya editorial. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- Sambungan awal untuk berkas font. -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fraunces untuk judul, Outfit untuk teks antarmuka. -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&family=Outfit:wght@380;520;650&display=swap" rel="stylesheet">
+  <!-- Ikon garis dari Bootstrap Icons, dipakai sebagai lambang tombol. -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <!-- Gaya yang ditulis sendiri, bukan tema jadi. -->
+  <link rel="stylesheet" href="css/gaya.css">
+</head>
+<body>
+  <!-- Layar masuk tampil sebelum token ada. -->
+  <main id="layar-masuk" class="layar-masuk">
+    <!-- Panel kiri memperkenalkan objek dan identitas mahasiswa. -->
+    <section class="panel-merek">
+      <!-- Label kecil di atas judul. -->
+      <p class="alis">Mini Project TWS · R7C</p>
+      <!-- Nama objek tugas. -->
+      <h1>Papan Pengumuman Kampus</h1>
+      <!-- Kalimat pendek tentang fungsi halaman. -->
+      <p class="pengantar">Satu tempat untuk membaca, menyusun, dan meninjau pengumuman resmi. Token login menjaga siapa yang boleh mengubah data.</p>
+      <!-- Identitas yang diwajibkan tampil di klien. -->
+      <p class="identitas">Dewi Purbarini · NIM 23676003</p>
+    </section>
+    <!-- Panel kanan berisi formulir login. -->
+    <section class="panel-formulir">
+      <!-- Judul formulir. -->
+      <h2>Masuk</h2>
+      <!-- Formulir tidak dikirim sebagai halaman baru; JavaScript yang mengambil nilainya. -->
+      <form id="formulir-masuk">
+        <!-- Label username terhubung ke input lewat atribut for. -->
+        <label for="username">Username</label>
+        <!-- Kotak username, wajib diisi di browser sebelum dikirim. -->
+        <input id="username" name="username" autocomplete="username" required>
+        <!-- Label sandi. -->
+        <label for="password">Password</label>
+        <!-- Kotak sandi disembunyikan karakternya. -->
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <!-- Tempat pesan 401, 422, atau 429. -->
+        <p id="pesan-masuk" class="pesan-masuk" role="alert"></p>
+        <!-- Tombol mengirim kredensial ke POST /login. -->
+        <button type="submit" id="tombol-masuk">Masuk</button>
+      </form>
+      <!-- Pengingat akun uji agar demo tidak terhambat. -->
+      <aside class="akun-uji">
+        <!-- Judul catatan akun. -->
+        <strong>Akun uji</strong>
+        <!-- Akun admin. -->
+        <span>admin · Admin23676003</span>
+        <!-- Akun user, tanpa hak ubah. -->
+        <span>user · User23676003</span>
+      </aside>
+    </section>
+  </main>
+
+  <!-- Layar aplikasi disembunyikan sampai login berhasil. -->
+  <div id="layar-aplikasi" class="layar-aplikasi" hidden>
+    <!-- Kepala halaman memuat objek, nama, NIM, dan akun yang masuk. -->
+    <header class="kepala">
+      <!-- Kelompok judul. -->
+      <div>
+        <!-- Label objek. -->
+        <p class="alis">Pengumuman Kampus</p>
+        <!-- Nama dan NIM, wajib terlihat setelah masuk. -->
+        <h1>Dewi Purbarini · 23676003</h1>
+      </div>
+      <!-- Kelompok akun dan keluar. -->
+      <div class="akun">
+        <!-- Nama pengguna yang sedang masuk. -->
+        <span id="nama-pengguna"></span>
+        <!-- Lencana admin atau user. -->
+        <span id="peran-pengguna" class="lencana"></span>
+        <!-- Tombol menghapus token dari sessionStorage. -->
+        <button type="button" id="tombol-keluar" class="tombol-garis"><i class="bi bi-box-arrow-right"></i> Keluar</button>
+      </div>
+    </header>
+
+    <!-- Bilah saringan dan aksi. -->
+    <section class="bilah">
+      <!-- Pencarian judul atau kode di sisi klien. -->
+      <input id="saringan-teks" type="search" placeholder="Cari judul atau kode">
+      <!-- Saringan kategori, termasuk pilihan semua. -->
+      <select id="saringan-kategori">
+        <!-- Nilai kosong berarti semua kategori. -->
+        <option value="">Semua kategori</option>
+        <!-- Empat kategori yang juga divalidasi server. -->
+        <option>Akademik</option>
+        <option>Kemahasiswaan</option>
+        <option>Beasiswa</option>
+        <option>Umum</option>
+      </select>
+      <!-- Tombol tambah hanya dipakai admin; disembunyikan untuk user. -->
+      <button type="button" id="tombol-tambah" class="tombol-isi"><i class="bi bi-plus-lg"></i> Tambah</button>
+      <!-- Tombol log hanya untuk admin. -->
+      <button type="button" id="tombol-log" class="tombol-garis"><i class="bi bi-journal-text"></i> Log</button>
+    </section>
+
+    <!-- Status memuat, kosong, atau gagal. -->
+    <p id="status-daftar" class="status-daftar"></p>
+    <!-- Kisi kartu pengumuman diisi JavaScript. -->
+    <section id="daftar-kartu" class="kisi"></section>
+
+    <!-- Panel log admin, tersembunyi sampai diminta. -->
+    <section id="panel-log" class="panel-log" hidden>
+      <!-- Judul panel. -->
+      <h2>Catatan permintaan</h2>
+      <!-- Pembungkus agar tabel bisa digeser di ponsel. -->
+      <div class="gulir">
+        <!-- Tabel log API. -->
+        <table>
+          <!-- Kepala kolom sesuai field log_api. -->
+          <thead>
+            <tr>
+              <th>Waktu</th>
+              <th>Method</th>
+              <th>Path</th>
+              <th>Status</th>
+              <th>IP</th>
+              <th>Username</th>
+              <th>Pesan</th>
+            </tr>
+          </thead>
+          <!-- Isi diisi ulang setiap kali log dibuka. -->
+          <tbody id="isi-log"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal formulir tambah dan ubah. -->
+  <div id="modal-formulir" class="modal" hidden>
+    <!-- Lapisan gelap; klik di sini menutup modal. -->
+    <div class="lapisan" data-tutup="formulir"></div>
+    <!-- Kotak formulir. -->
+    <form id="formulir-data" class="lembar">
+      <!-- Judul berubah menjadi Tambah atau Ubah. -->
+      <h2 id="judul-modal">Tambah pengumuman</h2>
+      <!-- Kode unik. -->
+      <label for="kode_info">Kode info</label>
+      <input id="kode_info" name="kode_info" maxlength="20" required>
+      <!-- Judul pengumuman. -->
+      <label for="judul">Judul</label>
+      <input id="judul" name="judul" maxlength="150" required>
+      <!-- Kategori dari daftar tetap. -->
+      <label for="kategori">Kategori</label>
+      <select id="kategori" name="kategori" required>
+        <option value="">Pilih kategori</option>
+        <option>Akademik</option>
+        <option>Kemahasiswaan</option>
+        <option>Beasiswa</option>
+        <option>Umum</option>
+      </select>
+      <!-- Tanggal kegiatan atau batas. -->
+      <label for="tanggal">Tanggal</label>
+      <input id="tanggal" name="tanggal" type="date" required>
+      <!-- Nama unit atau orang yang mengumumkan. -->
+      <label for="penulis">Penulis</label>
+      <input id="penulis" name="penulis" maxlength="100" required>
+      <!-- Kolom angka 1 sampai 5. -->
+      <label for="prioritas">Prioritas (1 rendah, 5 tinggi)</label>
+      <input id="prioritas" name="prioritas" type="number" min="1" max="5" step="1" required>
+      <!-- Ringkasan isi. -->
+      <label for="ringkasan">Ringkasan</label>
+      <textarea id="ringkasan" name="ringkasan" maxlength="255" rows="3" required></textarea>
+      <!-- Pesan validasi 422 atau konflik 409. -->
+      <p id="pesan-formulir" class="pesan-masuk" role="alert"></p>
+      <!-- Tombol kaki modal. -->
+      <div class="kaki-modal">
+        <!-- Menutup tanpa menyimpan. -->
+        <button type="button" id="batal-formulir" class="tombol-garis">Batal</button>
+        <!-- Mengirim POST atau PUT. -->
+        <button type="submit" class="tombol-isi">Simpan</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal konfirmasi hapus. -->
+  <div id="modal-hapus" class="modal" hidden>
+    <!-- Lapisan gelap modal hapus. -->
+    <div class="lapisan" data-tutup="hapus"></div>
+    <!-- Kotak konfirmasi. -->
+    <div class="lembar lembar-kecil">
+      <!-- Judul peringatan. -->
+      <h2>Hapus pengumuman?</h2>
+      <!-- Nama pengumuman yang akan dihapus. -->
+      <p id="teks-hapus"></p>
+      <!-- Tombol keputusan. -->
+      <div class="kaki-modal">
+        <!-- Batal menutup modal. -->
+        <button type="button" id="batal-hapus" class="tombol-garis">Batal</button>
+        <!-- Ya mengirim DELETE. -->
+        <button type="button" id="ya-hapus" class="tombol-bahaya">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tumpukan pemberitahuan singkat. -->
+  <div id="wadah-toast" class="wadah-toast"></div>
+  <!-- Seluruh perilaku klien ada di berkas ini. -->
+  <script src="js/aplikasi.js"></script>
+</body>
+</html>

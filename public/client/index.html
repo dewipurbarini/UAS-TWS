@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <!-- Agar lebar layar ponsel tidak diskalakan ke desktop. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pengumuman Kampus — DEWI PURBARINI — 23676003</title>
+    <!-- Font judul (Fraunces) dan font isi (Source Sans 3). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap hanya untuk dasar form dan grid. Tampilan ditimpa style.css. -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Ikon. Tidak memakai file ikon lokal. -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header selalu terlihat, termasuk saat login. Teks identitas sesuai soal. -->
+    <header class="kepala">
+        <div class="kepala-dalam">
+            <div class="merek">
+                <span class="lencana" aria-hidden="true"><i class="bi bi-megaphone"></i></span>
+                <div>
+                    <p class="identitas">Pengumuman Kampus — DEWI PURBARINI — 23676003</p>
+                    <p class="kelas">Kelas R7C · Teknologi Web Service</p>
+                </div>
+            </div>
+            <!-- Hanya muncul setelah login. -->
+            <div class="akun" id="area-akun" hidden>
+                <div>
+                    <strong id="nama-akun"></strong>
+                    <span class="peran" id="peran-akun"></span>
+                </div>
+                <button type="button" class="tombol tombol-ringan" id="tombol-keluar">
+                    <i class="bi bi-box-arrow-right"></i> Keluar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Layar login. Disembunyikan setelah token diterima. -->
+        <section id="layar-login" class="layar-login">
+            <div class="hero">
+                <p class="eyebrow"><i class="bi bi-building"></i> Papan informasi kampus</p>
+                <h1>Satu tempat untuk membaca dan mengelola pengumuman.</h1>
+                <p class="lead">Masuk dengan akun yang sudah terdaftar. Token disimpan di tab ini saja, lalu ikut di header setiap permintaan.</p>
+            </div>
+            <form id="form-login" class="kartu-login" novalidate>
+                <h2><i class="bi bi-shield-lock"></i> Masuk</h2>
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input id="username" name="username" autocomplete="username" placeholder="admin atau user">
+                    <small class="error-field" data-error-for="username"></small>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Password akun uji">
+                    <small class="error-field" data-error-for="password"></small>
+                </div>
+                <p id="pesan-login" class="pesan-form" role="status"></p>
+                <button type="submit" class="tombol tombol-utama" id="tombol-masuk">
+                    <i class="bi bi-box-arrow-in-right"></i> Masuk
+                </button>
+                <p class="petunjuk">Akun uji: <strong>admin / admin123</strong> (admin) dan <strong>user / user123</strong> (user).</p>
+            </form>
+        </section>
+
+        <!-- Layar aplikasi. -->
+        <section id="layar-app" class="layar-app" hidden>
+            <div class="bilah">
+                <div class="tab" role="tablist">
+                    <button type="button" class="tab-aktif" id="tab-data" role="tab"><i class="bi bi-list-ul"></i> Pengumuman</button>
+                    <!-- Disembunyikan untuk role user lewat CSS dan atribut hidden. -->
+                    <button type="button" class="khusus-admin" id="tab-log" role="tab"><i class="bi bi-journal-text"></i> Log API</button>
+                </div>
+                <button type="button" class="tombol tombol-utama khusus-admin" id="tombol-tambah">
+                    <i class="bi bi-plus-lg"></i> Tambah
+                </button>
+            </div>
+
+            <div id="panel-data">
+                <div class="alat">
+                    <div class="field field-tumbuh">
+                        <label for="kotak-cari">Cari</label>
+                        <input id="kotak-cari" type="search" placeholder="Judul, kode, atau penulis">
+                    </div>
+                    <div class="field">
+                        <label for="filter-kategori">Kategori</label>
+                        <select id="filter-kategori">
+                            <option value="">Semua</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="urutan">Urutan</label>
+                        <select id="urutan">
+                            <option value="terbaru">Tanggal terbaru</option>
+                            <option value="terlama">Tanggal terlama</option>
+                            <option value="dibaca">Paling banyak dibaca</option>
+                            <option value="judul">Judul A–Z</option>
+                        </select>
+                    </div>
+                    <p class="jumlah" id="jumlah-data"></p>
+                </div>
+
+                <!-- Kerangka loading. Disembunyikan saat data sudah datang. -->
+                <div id="kerangka" class="kerangka" hidden>
+                    <div></div><div></div><div></div>
+                </div>
+
+                <!-- Tabel untuk layar lebar. -->
+                <div class="tabel-bungkus">
+                    <table class="tabel">
+                        <thead>
+                            <tr>
+                                <th>Kode</th>
+                                <th>Judul</th>
+                                <th>Kategori</th>
+                                <th>Tanggal</th>
+                                <th>Penulis</th>
+                                <th>Dibaca</th>
+                                <th class="khusus-admin">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="isi-tabel"></tbody>
+                    </table>
+                </div>
+                <!-- Kartu untuk ponsel. Diisi JavaScript yang sama. -->
+                <div id="isi-kartu" class="daftar-kartu"></div>
+
+                <div id="kosong" class="kosong" hidden>
+                    <i class="bi bi-inbox"></i>
+                    <p id="teks-kosong">Belum ada pengumuman.</p>
+                    <button type="button" class="tombol tombol-utama khusus-admin" id="tombol-tambah-kosong">
+                        <i class="bi bi-plus-lg"></i> Tambah pengumuman
+                    </button>
+                </div>
+            </div>
+
+            <div id="panel-log" hidden>
+                <div class="alat">
+                    <button type="button" class="tombol tombol-ringan" id="tombol-muat-log">
+                        <i class="bi bi-arrow-clockwise"></i> Muat ulang
+                    </button>
+                    <p class="jumlah" id="jumlah-log"></p>
+                </div>
+                <div id="kerangka-log" class="kerangka" hidden><div></div><div></div></div>
+                <div class="tabel-bungkus tabel-log">
+                    <table class="tabel">
+                        <thead>
+                            <tr>
+                                <th>Waktu</th>
+                                <th>Method</th>
+                                <th>Path</th>
+                                <th>Status</th>
+                                <th>IP</th>
+                                <th>Username</th>
+                                <th>Pesan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="isi-log"></tbody>
+                    </table>
+                </div>
+                <div id="isi-log-kartu" class="daftar-kartu"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal tambah dan ubah. Elemen dialog punya fokus bawaan browser. -->
+    <dialog id="modal-form">
+        <form id="form-data" novalidate>
+            <header class="modal-kepala">
+                <h2 id="judul-modal">Tambah pengumuman</h2>
+                <button type="button" class="tutup" id="tutup-form" aria-label="Tutup"><i class="bi bi-x-lg"></i></button>
+            </header>
+            <input type="hidden" id="id-data">
+            <div class="grid-form">
+                <div class="field">
+                    <label for="kode_info">Kode info</label>
+                    <input id="kode_info" name="kode_info" maxlength="20" placeholder="INFO-009">
+                    <small class="error-field" data-error-for="kode_info"></small>
+                </div>
+                <div class="field">
+                    <label for="kategori">Kategori</label>
+                    <input id="kategori" name="kategori" maxlength="50" list="daftar-kategori" placeholder="Akademik">
+                    <datalist id="daftar-kategori">
+                        <option value="Akademik"></option>
+                        <option value="Beasiswa"></option>
+                        <option value="Kemahasiswaan"></option>
+                        <option value="Umum"></option>
+                        <option value="Fasilitas"></option>
+                    </datalist>
+                    <small class="error-field" data-error-for="kategori"></small>
+                </div>
+                <div class="field field-penuh">
+                    <label for="judul">Judul</label>
+                    <input id="judul" name="judul" maxlength="150">
+                    <small class="error-field" data-error-for="judul"></small>
+                </div>
+                <div class="field">
+                    <label for="tanggal">Tanggal</label>
+                    <input id="tanggal" name="tanggal" type="date">
+                    <small class="error-field" data-error-for="tanggal"></small>
+                </div>
+                <div class="field">
+                    <label for="penulis">Penulis</label>
+                    <input id="penulis" name="penulis" maxlength="100">
+                    <small class="error-field" data-error-for="penulis"></small>
+                </div>
+                <div class="field">
+                    <label for="jumlah_dibaca">Jumlah dibaca</label>
+                    <input id="jumlah_dibaca" name="jumlah_dibaca" inputmode="numeric" placeholder="0">
+                    <small class="error-field" data-error-for="jumlah_dibaca"></small>
+                </div>
+            </div>
+            <footer class="modal-aksi">
+                <button type="button" class="tombol tombol-ringan" id="batal-form">Batal</button>
+                <button type="submit" class="tombol tombol-utama" id="tombol-simpan">
+                    <i class="bi bi-check2"></i> Simpan
+                </button>
+            </footer>
+        </form>
+    </dialog>
+
+    <!-- Konfirmasi hapus, terpisah dari form agar tidak langsung terhapus. -->
+    <dialog id="modal-hapus">
+        <header class="modal-kepala">
+            <h2><i class="bi bi-exclamation-triangle"></i> Hapus pengumuman?</h2>
+            <button type="button" class="tutup" id="tutup-hapus" aria-label="Tutup"><i class="bi bi-x-lg"></i></button>
+        </header>
+        <p id="teks-hapus">Data yang dihapus tidak bisa dikembalikan dari halaman ini.</p>
+        <footer class="modal-aksi">
+            <button type="button" class="tombol tombol-ringan" id="batal-hapus">Batal</button>
+            <button type="button" class="tombol tombol-bahaya" id="tombol-hapus-ya">
+                <i class="bi bi-trash"></i> Hapus
+            </button>
+        </footer>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+/* Palet kampus: biru tua seperti jas almamater, emas seperti aksen lambang, teal sebagai warna penyejuk. */
+:root {
+    --warna-utama: #0e2744;
+    --warna-utama-lembut: #1c3d66;
+    --warna-aksen: #c6a15b;
+    --warna-teal: #1f6f64;
+    --warna-latar: #f3efe4;
+    --warna-kartu: #fffdf8;
+    --warna-teks: #1b2430;
+    --warna-redup: #5c6770;
+    --warna-garis: #e4dccb;
+    --warna-bahaya: #8d2b2b;
+    --warna-sukses: #1e7a46;
+    --warna-fokus: #c6a15b;
+    --font-judul: "Fraunces", Georgia, serif;
+    --font-isi: "Source Sans 3", "Segoe UI", sans-serif;
+    --bayangan: 0 16px 40px rgba(14, 39, 68, 0.12);
+    --radius: 18px;
+}
+
+/* Reset ringan di atas Bootstrap agar ukuran font konsisten. */
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--warna-teks);
+    background:
+        radial-gradient(circle at top left, rgba(198, 161, 91, 0.18), transparent 28%),
+        var(--warna-latar);
+    font-family: var(--font-isi);
+    font-size: 1.05rem;
+    line-height: 1.5;
+}
+
+/* Fokus terlihat untuk keyboard. */
+:focus-visible {
+    outline: 3px solid var(--warna-fokus);
+    outline-offset: 2px;
+}
+
+h1, h2, .identitas {
+    font-family: var(--font-judul);
+    font-weight: 560;
+    letter-spacing: -0.02em;
+}
+
+/* Header identitas. Teks putih di atas biru tua, kontrasnya cukup. */
+.kepala {
+    background: linear-gradient(120deg, var(--warna-utama), var(--warna-utama-lembut) 70%);
+    color: #f7f4ec;
+    border-bottom: 4px solid var(--warna-aksen);
+}
+
+.kepala-dalam, .layar-app, .layar-login {
+    width: min(1120px, calc(100% - 2rem));
+    margin: 0 auto;
+}
+
+.kepala-dalam {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.merek { display: flex; gap: 0.8rem; align-items: center; }
+
+.lencana {
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: var(--warna-aksen);
+    color: var(--warna-utama);
+    font-size: 1.3rem;
+}
+
+.identitas { margin: 0; font-size: 1.15rem; line-height: 1.25; }
+.kelas { margin: 0.15rem 0 0; color: #d9e2ee; font-size: 0.92rem; }
+
+.akun { display: flex; gap: 0.8rem; align-items: center; text-align: right; }
+.peran {
+    display: inline-block;
+    margin-left: 0.35rem;
+    padding: 0.05rem 0.45rem;
+    border-radius: 999px;
+    background: rgba(198, 161, 91, 0.25);
+    color: #f3e2bc;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+/* Tombol sendiri, bukan tampilan btn-primary Bootstrap. */
+.tombol {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.55rem 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 0.35rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.tombol:disabled { opacity: 0.55; cursor: not-allowed; }
+.tombol-utama { background: var(--warna-aksen); color: #241c0c; }
+.tombol-utama:hover { filter: brightness(1.05); }
+.tombol-ringan { background: transparent; color: inherit; border: 1px solid currentColor; }
+.kepala .tombol-ringan { color: #f7f4ec; }
+.tombol-bahaya { background: var(--warna-bahaya); color: white; }
+
+/* Layar login: dua kolom di laptop, satu kolom di ponsel. */
+.layar-login {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 2rem;
+    align-items: center;
+    padding: 2.5rem 0 3rem;
+}
+
+.hero h1 { font-size: clamp(2rem, 4vw, 3.4rem); margin: 0.4rem 0 0.8rem; }
+.eyebrow { color: var(--warna-teal); font-weight: 700; margin: 0; }
+.lead { color: var(--warna-redup); max-width: 38rem; }
+
+.kartu-login, .kosong, dialog {
+    background: var(--warna-kartu);
+    border: 1px solid var(--warna-garis);
+    border-radius: var(--radius);
+    box-shadow: var(--bayangan);
+}
+
+.kartu-login { padding: 1.4rem; }
+.kartu-login h2 { margin-top: 0; font-size: 1.6rem; }
+.petunjuk { color: var(--warna-redup); font-size: 0.92rem; }
+
+.field { display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.8rem; }
+.field label { font-weight: 700; font-size: 0.92rem; }
+.field input, .field select {
+    border: 1px solid #cfc5b0;
+    border-radius: 12px;
+    padding: 0.6rem 0.75rem;
+    font: inherit;
+    background: white;
+    width: 100%;
+}
+.error-field { color: var(--warna-bahaya); min-height: 1rem; }
+.pesan-form { min-height: 1.2rem; font-weight: 700; }
+.pesan-form.gagal { color: var(--warna-bahaya); }
+.pesan-form.sukses { color: var(--warna-sukses); }
+
+.layar-app { padding: 1.2rem 0 3rem; }
+.bilah, .alat {
+    display: flex;
+    gap: 0.75rem;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+.tab { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.tab button {
+    border: 1px solid var(--warna-garis);
+    background: transparent;
+    border-radius: 999px;
+    padding: 0.4rem 0.8rem;
+    font: inherit;
+    font-weight: 700;
+}
+.tab-aktif { background: var(--warna-utama) !important; color: white !important; border-color: var(--warna-utama) !important; }
+.field-tumbuh { flex: 1; min-width: 12rem; }
+.jumlah { margin: 0 0 0.8rem; color: var(--warna-redup); font-weight: 700; }
+
+/* User tidak melihat tombol admin, walau elemennya ada di HTML. */
+body[data-role="user"] .khusus-admin { display: none !important; }
+
+/* Kerangka loading: balok abu yang berdenyut. */
+.kerangka div {
+    height: 3.2rem;
+    margin-bottom: 0.6rem;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #e7e0d2, #f7f3ea, #e7e0d2);
+    background-size: 200% 100%;
+    animation: kilau 1.2s infinite;
+}
+@keyframes kilau {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+
+.tabel-bungkus {
+    overflow-x: auto;
+    background: var(--warna-kartu);
+    border-radius: var(--radius);
+    border: 1px solid var(--warna-garis);
+}
+.tabel { width: 100%; border-collapse: collapse; }
+.tabel th, .tabel td { padding: 0.75rem 0.8rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--warna-garis); }
+.tabel th { font-size: 0.82rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--warna-redup); }
+.aksi { display: flex; gap: 0.35rem; }
+.ikon-aksi {
+    border: 1px solid var(--warna-garis);
+    background: white;
+    border-radius: 10px;
+    width: 2.1rem;
+    height: 2.1rem;
+}
+
+/* Badge kategori. Warna beda agar cepat dipindai. */
+.badge { display: inline-flex; align-items: center; gap: 0.25rem; border-radius: 999px; padding: 0.1rem 0.55rem; font-size: 0.82rem; font-weight: 700; }
+.kat-akademik { background: #e5eef8; color: #16365c; }
+.kat-beasiswa { background: #f8efd8; color: #6d5314; }
+.kat-kemahasiswaan { background: #efe7f6; color: #4d2d6b; }
+.kat-umum { background: #e5f3f1; color: #14564e; }
+.kat-fasilitas { background: #e7f0e4; color: #24532a; }
+.kat-lain { background: #eeeae2; color: #3d4450; }
+
+.status-pill { font-weight: 700; }
+.s-2 { color: var(--warna-sukses); }
+.s-4 { color: var(--warna-bahaya); }
+.s-5 { color: #8a4b08; }
+
+.daftar-kartu { display: none; }
+.kartu-item {
+    background: var(--warna-kartu);
+    border-radius: 16px;
+    border: 1px solid var(--warna-garis);
+    border-left: 6px solid var(--warna-teal);
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.7rem;
+}
+.kartu-item h3 { margin: 0.35rem 0; font-family: var(--font-judul); font-size: 1.25rem; }
+.meta { color: var(--warna-redup); font-size: 0.92rem; }
+
+.kosong { text-align: center; padding: 2rem 1rem; }
+.kosong i { font-size: 2.4rem; color: var(--warna-teal); }
+
+dialog { width: min(640px, calc(100% - 1.5rem)); padding: 0; border: 0; }
+dialog::backdrop { background: rgba(14, 39, 68, 0.55); }
+dialog form, #modal-hapus { padding: 1rem 1.1rem 1.1rem; }
+.modal-kepala, .modal-aksi { display: flex; justify-content: space-between; gap: 0.5rem; align-items: center; }
+.modal-kepala h2 { margin: 0; font-size: 1.4rem; }
+.tutup { border: 0; background: transparent; font-size: 1.1rem; }
+.grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem 0.8rem; margin-top: 0.8rem; }
+.field-penuh { grid-column: 1 / -1; }
+
+.toast {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    max-width: min(22rem, calc(100% - 2rem));
+    padding: 0.8rem 1rem;
+    border-radius: 14px;
+    color: white;
+    box-shadow: var(--bayangan);
+    z-index: 20;
+}
+.toast.sukses { background: var(--warna-sukses); }
+.toast.gagal { background: var(--warna-bahaya); }
+.toast.info { background: var(--warna-utama); }
+
+/* Ponsel: kartu menggantikan tabel, form menjadi satu kolom, navigasi tidak meluber. */
+@media (max-width: 800px) {
+    .kepala-dalam, .layar-login, .akun { display: block; }
+    .akun { margin-top: 0.8rem; text-align: left; }
+    .layar-login { grid-template-columns: 1fr; padding-top: 1.2rem; }
+    .identitas { font-size: 1rem; }
+    .tabel-bungkus { display: none; }
+    .daftar-kartu { display: block; }
+    .grid-form { grid-template-columns: 1fr; }
+    .bilah { align-items: stretch; }
+    .tombol, .tab button { width: 100%; }
+    .tab { width: 100%; }
+}

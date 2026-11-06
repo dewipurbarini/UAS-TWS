@@ -1,0 +1,169 @@
+### Variabel. Isi token dari respons login sebelum request yang membutuhkan auth.
+@base = http://localhost:8000
+@tokenAdmin = ganti-dengan-token-admin
+@tokenUser = ganti-dengan-token-user
+
+### 1. Login admin benar
+POST {{base}}/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### 2a. Login username salah
+POST {{base}}/login
+Content-Type: application/json
+
+{
+  "username": "bukan-akun",
+  "password": "apa-saja"
+}
+
+### 2b. Login password salah
+POST {{base}}/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "salah"
+}
+
+### 3. Ulangi login gagal sampai 6 kali untuk melihat 429
+POST {{base}}/login
+Content-Type: application/json
+
+{
+  "username": "brute",
+  "password": "salah"
+}
+
+### 4a. Me tanpa token
+GET {{base}}/me
+
+### 4b. Token rusak
+GET {{base}}/me
+Authorization: Bearer aaa.bbb.ccc
+
+### 4c. Header bukan Bearer
+GET {{base}}/me
+Authorization: Token abc
+
+### 5. Me dengan token admin
+GET {{base}}/me
+Authorization: Bearer {{tokenAdmin}}
+
+### 6. Daftar dan detail sebagai user
+GET {{base}}/pengumuman
+Authorization: Bearer {{tokenUser}}
+
+###
+GET {{base}}/pengumuman/1
+Authorization: Bearer {{tokenUser}}
+
+### 7. Id tidak valid dan data tidak ada
+GET {{base}}/pengumuman/abc
+Authorization: Bearer {{tokenUser}}
+
+###
+GET {{base}}/pengumuman/-1
+Authorization: Bearer {{tokenUser}}
+
+###
+GET {{base}}/pengumuman/9999
+Authorization: Bearer {{tokenUser}}
+
+### 8. Tambah sebagai user (403) lalu sebagai admin (201)
+POST {{base}}/pengumuman
+Authorization: Bearer {{tokenUser}}
+Content-Type: application/json
+
+{
+  "kode_info": "INFO-UJI",
+  "judul": "Uji tambah",
+  "kategori": "Umum",
+  "tanggal": "2026-11-06",
+  "penulis": "Penguji",
+  "jumlah_dibaca": 1
+}
+
+###
+POST {{base}}/pengumuman
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "kode_info": "INFO-UJI",
+  "judul": "Uji tambah",
+  "kategori": "Umum",
+  "tanggal": "2026-11-06",
+  "penulis": "Penguji",
+  "jumlah_dibaca": 1
+}
+
+### 9. Kode info kembar
+POST {{base}}/pengumuman
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "kode_info": "INFO-001",
+  "judul": "Duplikat",
+  "kategori": "Umum",
+  "tanggal": "2026-11-06",
+  "penulis": "Penguji",
+  "jumlah_dibaca": 0
+}
+
+### 10. Validasi gagal
+POST {{base}}/pengumuman
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "kode_info": "",
+  "judul": "",
+  "kategori": "",
+  "tanggal": "06-11-2026",
+  "penulis": "",
+  "jumlah_dibaca": -3
+}
+
+### 11. Ubah lalu hapus
+PUT {{base}}/pengumuman/1
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "kode_info": "INFO-001",
+  "judul": "Jadwal UTS Semester Ganjil (diperbarui)",
+  "kategori": "Akademik",
+  "tanggal": "2026-10-06",
+  "penulis": "Biro Akademik",
+  "jumlah_dibaca": 121
+}
+
+### Hapus sebagai user
+DELETE {{base}}/pengumuman/9
+Authorization: Bearer {{tokenUser}}
+
+### Hapus sebagai admin
+DELETE {{base}}/pengumuman/9
+Authorization: Bearer {{tokenAdmin}}
+
+### 12. Log
+GET {{base}}/log?limit=20
+Authorization: Bearer {{tokenAdmin}}
+
+###
+GET {{base}}/log
+Authorization: Bearer {{tokenUser}}
+
+### Route tidak ada dan method tidak diizinkan
+GET {{base}}/tidak-ada
+Authorization: Bearer {{tokenAdmin}}
+
+###
+POST {{base}}/me
+Authorization: Bearer {{tokenAdmin}}

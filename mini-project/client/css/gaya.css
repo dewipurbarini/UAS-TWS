@@ -1,0 +1,461 @@
+/* Warna, font, dan jarak dipakai ulang lewat variabel. */
+:root {
+  --tinta: #1b2430; /* warna teks utama, biru arang */
+  --tinta-lembut: #3d4c63; /* teks sekunder */
+  --emas: #a16207; /* aksen kuningan, bukan ungu bawaan kerangka kerja */
+  --emas-muda: #f8efd8; /* latar lencana dan sorotan */
+  --kertas: #f4f0e6; /* latar halaman seperti kertas arsip */
+  --kartu: #fffdf8; /* permukaan kartu */
+  --garis: #e6dcc8; /* pembatas halus */
+  --pinus: #1f6b4a; /* status berhasil */
+  --bata: #9b3333; /* bahaya dan hapus */
+  --laut: #1d4e89; /* tautan dan status info */
+  --bayang: 0 18px 40px rgba(27, 36, 48, 0.08); /* bayangan kartu */
+  --judul: "Fraunces", Georgia, serif; /* font judul */
+  --teks: "Outfit", "Segoe UI", sans-serif; /* font antarmuka */
+}
+
+/* Kotak halaman memakai tinggi layar dan font antarmuka. */
+body {
+  margin: 0; /* hilangkan jarak putih bawaan browser */
+  min-height: 100vh; /* minimal setinggi jendela */
+  background:
+    radial-gradient(circle at top left, #fff8e8, transparent 28%),
+    var(--kertas); /* gradasi hangat di pojok plus warna kertas */
+  color: var(--tinta); /* warna huruf bawaan */
+  font-family: var(--teks); /* Outfit untuk teks biasa */
+  font-size: 16px; /* ukuran dasar yang nyaman dibaca */
+}
+
+/* Judul memakai font editorial. */
+h1, h2 {
+  font-family: var(--judul); /* Fraunces */
+  font-weight: 560; /* tidak terlalu tebal */
+  letter-spacing: -0.03em; /* rapatkan sedikit agar judul padat */
+  margin: 0; /* jarak diatur induk masing-masing */
+}
+
+/* Tombol, input, dan pilihan memakai font yang sama. */
+button, input, select, textarea {
+  font: inherit; /* ikut Outfit, bukan font bawaan formulir */
+}
+
+/* Label formulir menjadi blok di atas kotak isian. */
+label {
+  display: block; /* satu baris sendiri */
+  margin: 12px 0 6px; /* jarak atas dan bawah */
+  font-size: 0.82rem; /* sedikit lebih kecil dari teks */
+  font-weight: 650; /* agar terbaca sebagai nama field */
+}
+
+/* Kotak isian, pilihan, dan area teks berbagi bingkai. */
+input, select, textarea {
+  width: 100%; /* memenuhi lebar panel */
+  box-sizing: border-box; /* padding tidak menambah lebar */
+  border: 1px solid var(--garis); /* garis tipis */
+  background: #fff; /* putih bersih di dalam kertas krem */
+  border-radius: 12px; /* sudut membulat */
+  padding: 12px 14px; /* ruang ketikan */
+  color: var(--tinta); /* huruf gelap */
+}
+
+/* Kotak yang sedang diisi mendapat garis emas. */
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--emas); /* penanda fokus yang jelas */
+  border-color: transparent; /* garis biasa diserahkan ke outline */
+}
+
+/* Tombol dasar. */
+button {
+  border: 0; /* tanpa bingkai bawaan */
+  border-radius: 999px; /* bentuk pil */
+  padding: 12px 18px; /* ukuran sentuh yang cukup */
+  cursor: pointer; /* tanda bisa diklik */
+}
+
+/* Tombol aksi utama. */
+.tombol-isi {
+  background: var(--tinta); /* latar gelap */
+  color: #fffaf2; /* teks krem */
+}
+
+/* Tombol sekunder. */
+.tombol-garis {
+  background: transparent; /* tanpa isi */
+  color: var(--tinta); /* teks gelap */
+  border: 1px solid var(--garis); /* hanya garis */
+}
+
+/* Tombol hapus. */
+.tombol-bahaya {
+  background: var(--bata); /* merah bata */
+  color: white; /* teks putih */
+}
+
+/* Tombol yang tidak boleh dipakai terlihat redup dan tidak bisa diklik. */
+button:disabled {
+  opacity: 0.55; /* meredup */
+  cursor: not-allowed; /* kursor larangan */
+}
+
+/* Layar masuk terbagi dua kolom di laptop. */
+.layar-masuk {
+  min-height: 100vh; /* memenuhi jendela */
+  display: grid; /* susunan dua panel */
+  grid-template-columns: 1.15fr 0.85fr; /* kiri lebih lebar */
+}
+
+/* Panel identitas kiri. */
+.panel-merek {
+  padding: 64px 56px; /* ruang napas */
+  background:
+    linear-gradient(160deg, rgba(27, 36, 48, 0.92), rgba(27, 36, 48, 0.78)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cpath d='M0 80h160M80 0v160' stroke='%23ffffff' stroke-opacity='.08'/%3E%3C/svg%3E");
+  color: #f8f1e4; /* teks terang di atas tinta */
+  display: flex; /* agar isi bisa didorong vertikal */
+  flex-direction: column; /* judul berurutan ke bawah */
+  justify-content: flex-end; /* identitas duduk di bawah */
+}
+
+/* Judul besar di panel kiri. */
+.panel-merek h1 {
+  font-size: clamp(2.4rem, 5vw, 4.6rem); /* mengecil di layar sempit */
+  max-width: 9ch; /* pecah menjadi beberapa baris yang disengaja */
+  line-height: 0.95; /* judul rapat seperti poster */
+  margin: 12px 0 18px; /* jarak ke alis dan pengantar */
+}
+
+/* Teks pengantar di panel gelap. */
+.pengantar {
+  max-width: 38ch; /* panjang baris yang enak dibaca */
+  color: #eadfcb; /* krem redup */
+  line-height: 1.5; /* jarak baris longgar */
+}
+
+/* Alis kecil di atas judul. */
+.alis {
+  margin: 0; /* tanpa jarak bawaan paragraf */
+  text-transform: uppercase; /* huruf besar semua */
+  letter-spacing: 0.16em; /* renggang seperti cap */
+  font-size: 0.75rem; /* kecil */
+  color: var(--emas); /* aksen kuningan */
+}
+
+/* Panel kiri sudah gelap, jadi alisnya dibuat krem emas. */
+.panel-merek .alis {
+  color: #f0d48a; /* emas lebih terang agar kontras */
+}
+
+/* Nama dan NIM di panel masuk. */
+.identitas {
+  margin-top: 28px; /* terpisah dari pengantar */
+  font-weight: 650; /* lebih tegas */
+}
+
+/* Panel formulir kanan. */
+.panel-formulir {
+  display: flex; /* isi ditumpuk */
+  flex-direction: column; /* judul, formulir, akun */
+  justify-content: center; /* posisi vertikal di tengah */
+  padding: 48px 40px; /* ruang tepi */
+}
+
+/* Judul Masuk. */
+.panel-formulir h2 {
+  font-size: 2.4rem; /* cukup besar sebagai judul panel */
+  margin-bottom: 8px; /* jarak ke field pertama */
+}
+
+/* Tombol masuk selebar formulir. */
+#tombol-masuk {
+  width: 100%; /* satu baris penuh */
+  margin-top: 18px; /* terpisah dari pesan */
+  background: var(--emas); /* aksen utama layar masuk */
+  color: #1b2430; /* teks gelap di atas emas */
+  font-weight: 650; /* tegas */
+}
+
+/* Pesan kesalahan login dan formulir. */
+.pesan-masuk {
+  min-height: 1.2em; /* tetap menyisakan ruang agar tata letak tidak melompat */
+  color: var(--bata); /* merah untuk kesalahan */
+  font-size: 0.92rem; /* sedikit lebih kecil */
+}
+
+/* Kotak akun uji. */
+.akun-uji {
+  margin-top: 28px; /* terpisah dari tombol */
+  padding: 14px 16px; /* ruang dalam */
+  border-radius: 16px; /* sudut kartu */
+  background: var(--emas-muda); /* sorotan hangat */
+  display: grid; /* nama akun berjajar ke bawah */
+  gap: 4px; /* jarak antar baris akun */
+  font-size: 0.92rem; /* ringkas */
+}
+
+/* Layar setelah login. */
+.layar-aplikasi {
+  width: min(1120px, calc(100% - 32px)); /* lebar maksimal, masih ada tepi 16px */
+  margin: 0 auto 48px; /* di tengah, ada ruang bawah */
+}
+
+/* Kepala aplikasi. */
+.kepala {
+  display: flex; /* judul dan akun sebaris */
+  justify-content: space-between; /* judul kiri, akun kanan */
+  gap: 16px; /* jarak bila membungkus */
+  align-items: flex-end; /* garis bawah keduanya bertemu */
+  flex-wrap: wrap; /* akun turun bila judul tidak muat */
+  padding: 28px 0 18px; /* ruang atas dan bawah */
+}
+
+/* Judul nama mahasiswa. */
+.kepala h1 {
+  font-size: clamp(1.8rem, 3vw, 2.8rem); /* menyesuaikan lebar */
+  margin-top: 4px; /* dekat dengan alis */
+}
+
+/* Kelompok akun. */
+.akun {
+  display: flex; /* nama, lencana, dan tombol sebaris */
+  align-items: center; /* rata tengah vertikal */
+  gap: 10px; /* jarak antar unsur */
+  flex-wrap: wrap; /* turun bila sempit */
+}
+
+/* Lencana peran. */
+.lencana {
+  background: var(--emas-muda); /* latar hangat */
+  color: var(--emas); /* teks emas gelap */
+  border-radius: 999px; /* bentuk pil */
+  padding: 4px 10px; /* ruang kecil */
+  font-size: 0.8rem; /* ringkas */
+  font-weight: 650; /* tegas */
+}
+
+/* Bilah pencarian dan tombol. */
+.bilah {
+  display: flex; /* sebaris */
+  gap: 10px; /* jarak antar kontrol */
+  flex-wrap: wrap; /* membungkus di ponsel */
+  margin-bottom: 18px; /* jarak ke kartu */
+}
+
+/* Pencarian mengambil sisa lebar. */
+#saringan-teks {
+  flex: 1 1 220px; /* tumbuh, tetapi tidak lebih sempit dari 220px */
+}
+
+/* Pilihan kategori tidak perlu selebar pencarian. */
+#saringan-kategori {
+  flex: 0 1 200px; /* lebar sedang */
+}
+
+/* Kalimat status daftar. */
+.status-daftar {
+  color: var(--tinta-lembut); /* abu biru */
+  min-height: 1.2em; /* ruang stabil */
+}
+
+/* Kisi kartu. */
+.kisi {
+  display: grid; /* kartu berjajar */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* jumlah kolom mengikuti lebar */
+  gap: 16px; /* jarak antar kartu */
+}
+
+/* Satu kartu pengumuman. */
+.kartu {
+  background: var(--kartu); /* permukaan terang */
+  border: 1px solid var(--garis); /* bingkai */
+  border-radius: 22px; /* sudut besar */
+  padding: 18px; /* ruang isi */
+  box-shadow: var(--bayang); /* terangkat sedikit */
+  display: flex; /* isi ditumpuk */
+  flex-direction: column; /* dari meta ke tombol */
+  gap: 8px; /* jarak antar bagian */
+}
+
+/* Baris meta di atas judul kartu. */
+.meta {
+  display: flex; /* kode, kategori, prioritas sebaris */
+  justify-content: space-between; /* kode kiri, prioritas kanan */
+  gap: 8px; /* jarak */
+  color: var(--tinta-lembut); /* lebih redup dari judul */
+  font-size: 0.82rem; /* kecil */
+}
+
+/* Judul di dalam kartu. */
+.kartu h2 {
+  font-size: 1.45rem; /* lebih kecil dari judul halaman */
+  line-height: 1.15; /* tetap rapat */
+}
+
+/* Ringkasan kartu. */
+.ringkas {
+  color: var(--tinta-lembut); /* teks pendukung */
+  line-height: 1.45; /* enak dibaca */
+  margin: 0; /* tanpa margin paragraf */
+  flex: 1; /* mendorong tombol ke bawah kartu */
+}
+
+/* Baris penulis dan tanggal. */
+.kaki-kartu {
+  display: flex; /* dua informasi sebaris */
+  justify-content: space-between; /* terpisah kiri-kanan */
+  gap: 8px; /* jarak */
+  font-size: 0.85rem; /* kecil */
+}
+
+/* Tombol ubah dan hapus. */
+.aksi-kartu {
+  display: flex; /* sebaris */
+  gap: 8px; /* jarak tombol */
+  margin-top: 8px; /* terpisah dari kaki kartu */
+}
+
+/* Prioritas tinggi memakai warna bata. */
+.prioritas-tinggi {
+  color: var(--bata); /* merah */
+  font-weight: 650; /* tegas */
+}
+
+/* Prioritas sedang memakai laut. */
+.prioritas-sedang {
+  color: var(--laut); /* biru */
+  font-weight: 650; /* tegas */
+}
+
+/* Panel log. */
+.panel-log {
+  margin-top: 28px; /* terpisah dari kartu */
+  background: var(--kartu); /* permukaan sama dengan kartu */
+  border: 1px solid var(--garis); /* bingkai */
+  border-radius: 22px; /* sudut sama */
+  padding: 18px; /* ruang dalam */
+}
+
+/* Judul log. */
+.panel-log h2 {
+  margin-bottom: 12px; /* jarak ke tabel */
+}
+
+/* Area geser horizontal untuk tabel di ponsel. */
+.gulir {
+  overflow-x: auto; /* geser ke samping bila kolom tidak muat */
+}
+
+/* Tabel log. */
+table {
+  width: 100%; /* memenuhi panel */
+  border-collapse: collapse; /* garis menyatu */
+  font-size: 0.88rem; /* padat tetapi terbaca */
+}
+
+/* Sel tabel. */
+th, td {
+  text-align: left; /* rata kiri */
+  padding: 8px 10px; /* ruang sel */
+  border-bottom: 1px solid var(--garis); /* pemisah baris */
+  white-space: nowrap; /* tanggal dan method tidak terpotong jadi dua baris */
+}
+
+/* Kepala tabel. */
+th {
+  color: var(--tinta-lembut); /* lebih redup */
+  font-weight: 650; /* tetap tegas */
+}
+
+/* Atribut hidden harus mengalahkan display pada kelas, termasuk layar masuk dan modal. */
+[hidden] {
+  display: none !important; /* sembunyikan apa pun yang diberi atribut hidden */
+}
+
+/* Lapisan modal. */
+.modal {
+  position: fixed; /* menempel ke jendela, bukan ke guliran */
+  inset: 0; /* penuh ke empat tepi */
+  display: grid; /* untuk menengahkan lembar */
+  place-items: center; /* horizontal dan vertikal di tengah */
+  z-index: 20; /* di atas halaman */
+  padding: 16px; /* agar lembar tidak menempel tepi ponsel */
+}
+
+/* Latar redup di belakang lembar. */
+.lapisan {
+  position: absolute; /* mengisi modal */
+  inset: 0; /* empat tepi */
+  background: rgba(27, 36, 48, 0.46); /* tinta tembus pandang */
+}
+
+/* Lembar formulir. */
+.lembar {
+  position: relative; /* di atas lapisan */
+  z-index: 1; /* lebih tinggi dari lapisan */
+  width: min(520px, 100%); /* tidak lebih lebar dari layar */
+  max-height: calc(100vh - 32px); /* tidak lebih tinggi dari jendela */
+  overflow: auto; /* gulir di dalam bila form panjang */
+  background: var(--kartu); /* permukaan terang */
+  border-radius: 24px; /* sudut besar */
+  padding: 22px; /* ruang dalam */
+  box-shadow: var(--bayang); /* terangkat */
+}
+
+/* Lembar konfirmasi lebih sempit. */
+.lembar-kecil {
+  width: min(420px, 100%); /* lebih kecil dari formulir */
+}
+
+/* Kaki tombol modal. */
+.kaki-modal {
+  display: flex; /* tombol sebaris */
+  justify-content: flex-end; /* rata kanan */
+  gap: 8px; /* jarak */
+  margin-top: 16px; /* terpisah dari pesan */
+}
+
+/* Tumpukan toast di pojok. */
+.wadah-toast {
+  position: fixed; /* tidak ikut gulir */
+  right: 16px; /* tepi kanan */
+  bottom: 16px; /* tepi bawah */
+  display: grid; /* toast bertumpuk */
+  gap: 8px; /* jarak antar toast */
+  z-index: 30; /* di atas modal */
+}
+
+/* Satu toast. */
+.toast {
+  background: var(--tinta); /* gelap agar kontras di kertas */
+  color: #fffaf2; /* teks terang */
+  border-radius: 14px; /* sudut */
+  padding: 12px 14px; /* ruang */
+  max-width: 280px; /* tidak selebar layar laptop */
+  box-shadow: var(--bayang); /* terangkat */
+}
+
+/* Toast untuk kesalahan memakai garis bata. */
+.toast-gagal {
+  box-shadow: inset 4px 0 0 var(--bata); /* garis kiri merah */
+}
+
+/* Ponsel dan tablet sempit: panel masuk ditumpuk. */
+@media (max-width: 800px) {
+  .layar-masuk {
+    grid-template-columns: 1fr; /* satu kolom */
+  }
+
+  .panel-merek {
+    min-height: 42vh; /* poster atas tidak memenuhi seluruh layar */
+    padding: 32px 22px; /* tepi lebih kecil */
+  }
+
+  .panel-formulir {
+    padding: 28px 22px 40px; /* tepi lebih kecil */
+  }
+
+  .kepala {
+    align-items: flex-start; /* akun mulai dari kiri saat membungkus */
+    flex-direction: column; /* judul lalu akun */
+  }
+}

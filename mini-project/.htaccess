@@ -1,0 +1,10 @@
+RewriteEngine On
+# Salin header Authorization agar PHP tetap bisa membaca Bearer token.
+RewriteCond %{HTTP:Authorization} .
+RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+# Biarkan berkas dan folder yang benar-benar ada (client, css, js) dilayani langsung.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+# Selain itu, arahkan semua jalur API ke front controller index.php.
+RewriteRule ^ index.php [QSA,L]
